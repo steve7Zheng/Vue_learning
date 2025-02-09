@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>6-自定义指令-全局指令</title>
+		<script type="text/javascript" src="../js/vue.js"></script>
+	</head>
+	<body>
+		<div id="root">
+			<!--需求1：定义一个v-fbind指令，和v-bind功能类似，
+			但可以让其所绑定的input元素默认获取焦点,字体大小X-large-->
+			<input type="text" v-fbind:value="n" >
+			<hr/>
+			<button @click="n++">点我n+1</button>
+		</div>
+	</body>
+	<div id="root">
+    <!-- 定义一个v-text-pro指令，和v-text功能类似，但会把绑定的数值前后加$,加红色背景色-->
+    <h2>姓名：<span v-text-pro="name"></span></h2>
+  </div>
+	<script type="text/javascript">
+    // 全局指令
+    Vue.directive("text-pro", function(element, binding) {
+      element.innerText = "$" + binding.value + "$"
+      element.style.background = "red"
+    })
+    Vue.directive('fbind', {
+      // 指令与元素成功绑定时（一上来）
+      bind(element, binding){
+        element.value = binding.value;
+      },
+      // 指令所在元素被插入页面时
+      inserted(element, binding){
+        element.focus();
+        element.style.fontSize = "X-large";
+      },
+      // 指令所在得模板被重新解析时
+      update(element, binding){
+        element.value = binding.value;
+        element.focus();
+      }
+    })
+		new Vue({
+			el:'#root',
+			data:{
+				n:1
+			},
+			// directives: {
+			// 	"text-pro"(element, binding) {
+      //     element.innerText = "$" + binding.value + "$"
+      //     element.style.background = "red"
+      //   }
+			// }
+		})
+	</script>
+</html>

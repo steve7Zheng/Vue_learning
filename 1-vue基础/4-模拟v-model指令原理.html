@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>模拟v-model指令原理</title>
+</head>
+<body>
+  <div>
+    年龄：<input type="text" id="inputAge" value="10">
+  </div>
+  <script>
+    let _age = document.querySelector('#inputAge').value
+    document.querySelector('#inputAge').onblur = function() {
+      _age = document.querySelector('#inputAge').value
+    }
+    let student = {
+      id: 1,
+      name: "jack"
+    }
+    // 可以理解为数据代理
+    // 全部交给_age
+    // 首先_age要准确得到 就是输入框中的值（View -> Model)
+    // get 则将_age的值给出去
+    // set 则将_age的值更新 并根据更新的值更新输入框中的值（Model -> View)
+    Object.defineProperty(student, 'age', {
+      get() {
+        console.log("调用get方法")
+        return _age
+      },
+      set(value) {
+        console.log("调用set方法")
+        _age = value
+        document.querySelector('#inputAge').value = _age
+      }
+    })
+  </script>
+</body>
+</html>

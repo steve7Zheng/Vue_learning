@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>6-过滤器属性</title>
+  <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+<body>
+  <div id="root">
+    <!-- xxx | 过滤器名称 -->
+    姓名：{{name | nameFilter1 | nameFilter2("的房子")}}
+    <br>
+  </div>
+  <div id="root2">
+    <!-- xxx | 过滤器名称 -->
+    姓名：{{name | nameFilter1 | nameFilter2("的房子")}}
+    <br>
+  </div>
+  <script type="text/javascript">
+    // 全局过滤器
+    Vue.filter("nameFilter1", function(val) {
+      return val + "的老婆"
+    })
+    Vue.filter("nameFilter2", function(val, str) {
+      return val + "的妈妈" + str
+    })
+    const vm = new Vue({
+      el: '#root',
+      data: {
+        name: '张三',
+      },
+      // 过滤器（局部）
+      // filters: {
+      //   nameFilter1(val) {
+      //     return val + "的老婆"
+      //   },
+      //   nameFilter2(val, str) {
+      //     return val + "的妈妈" + str
+      //   }
+      // }
+    })
+    new Vue({
+      el: '#root2',
+      data: {
+        name: '李四'
+      }
+    })
+  </script>
+</body>
+</html>

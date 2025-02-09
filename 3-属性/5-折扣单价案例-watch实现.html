@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>5-折扣单价案例-watch实现</title>
+  <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+<body>
+  <div id="root">
+    总价：<input type="text" v-model="totalPrice"><br>
+    数量：<input type="text" v-model="amount"><br>
+    折扣：<input type="text" v-model="discount">折<br>
+    <!-- 利用watch侦听属性 -->
+    打折后的单价为：<span>{{avgPrice}}</span><br>
+  </div>
+  <script type="text/javascript">
+    const vm = new Vue({
+      el: '#root',
+      data: {
+        totalPrice: 300,
+        amount: 10,
+        discount: 7,
+        avgPrice:21
+      },
+      // 因为avgPrice与totalPrice amount discount三个属性都有关 
+      // 所以要随时更新avgPrice的话 就要侦听这三个属性 
+      // 当这三个属性变化的时候 拿到对应新值 对avgPrice做相应的及时的更新
+      // 啥时候用侦听不用计算？当要加一些异步任务的时候
+      watch: {
+        // totalPrice(val) {
+        //   this.avgPrice = (val/this.amount)*(this.discount/10)
+        // },
+        totalPrice(val) {
+          // 可以在里面加定时器
+          setTimeout(() => {
+            console.log(this) // 用箭头函数 否则这里的this是Window了
+            this.avgPrice = (val/this.amount)*(this.discount/10)
+          }, 2000)
+        },
+        amount(val) {
+          this.avgPrice = (this.totalPrice/val)*(this.discount/10)
+        },
+        discount(val) {
+          this.avgPrice = (this.totalPrice/this.amount)*(val/10)
+        }
+      }
+    })
+  </script>
+</body>
+</html>

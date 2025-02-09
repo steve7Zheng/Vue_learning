@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Template • TodoMVC</title>
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/index.css">
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+<section class="todoapp" id="root">
+    <header class="header">
+        <h1>todos</h1>
+        <input class="new-todo" placeholder="输入需要完成的任务?" autofocus @keydown.enter="handleAddTodo">
+    </header>
+    <!-- todos 数组列表为空时 隐藏section -->
+    <template v-if="todos.length">
+        <section class="main">
+            <!-- <input id="toggle-all" class="toggle-all" type="checkbox" @change="handleCheckAll" :checked="todos.every(t=>t.completed)"> -->
+            <!-- 用计算属性实现全选 -->
+            <input id="toggle-all" class="toggle-all" type="checkbox" v-model="checkAllState">
+            <label for="toggle-all">Mark all as complete</label>
+            <ul class="todo-list">
+                <!-- `editing` 为编辑样式 ，`completed` 为已完成样式 -->
+                <!-- 遍历todos 每个item为一个li -->
+                <!-- :class="{completed: item.completed}"  为类绑定一个对象 -->
+                <!-- editing: currentEditingItem === item 双击项是否为当前项 如果是 加上正在编辑中的样式 -->
+                <li v-for="(item, index) in filterTodos" :key="item.id" :class="{completed: item.completed, editing: currentEditingItem === item}">
+                    <div class="view">
+                        <!-- checkbox绑定一个布尔值 -->
+                        <input class="toggle" type="checkbox" v-model="item.completed">
+                        <label @dblclick="currentEditingItem = item">{{item.title}}</label>
+                        <!-- 删除一个todo 绑定点击事件 -->
+                        <button class="destroy" @click="handleRemoveTodo(index)"></button>
+                    </div>
+                    <!-- editing为true才有edit -->
+                    <!-- 回车或者失焦 编辑完成 -->
+                    <input class="edit" v-model="item.title" 
+                    @keydown.enter="handleEditTodo(index, $event)"
+                    @blur="handleEditTodo(index, $event)"
+                    @keydown.esc="currentEditingItem = null">
+                </li>
+            </ul>
+        </section>
+        <!-- todos 数组列表为空时 隐藏footer -->
+        <footer class="footer">
+            <!-- 计算属性获得剩余未完成的数量 -->
+            <span class="todo-count"><strong>{{leftItemCount}}</strong>项剩余</span>
+            <ul class="filters">
+                <li>
+                    <a :class="{selected: filterCondition===''}" href="#/">所有</a>
+                </li>
+                <li>
+                    <a href="#/active" :class="{selected: filterCondition==='active'}">未完成</a>
+                </li>
+                <li>
+                    <a href="#/completed" :class="{selected: filterCondition==='completed'}">已完成</a>
+                </li>
+            </ul>
+            <!-- 当未完成项为0时隐藏 ↓ -->
+            <button class="clear-completed" 
+            @click="handleClearCompleted"
+            v-show="todos.some(t=>t.completed)">清空已完成项</button>
+        </footer>
+    </template>
+</section>
+<footer class="info">
+    <p><a href="http://todomvc.com">TodoMVC</a></p>
+</footer>
+<script>
+    const vm = new Vue({
+        el: '#root',
+        data: {
+            // todos: [
+            //     {id: 1, title: '学习JS基础', completed: true},
+            //     {id: 2, title: '学习ES6基础', completed: false},
+            //     {id: 3, title: '学习Vue基础', completed: false}
+            // ],
+            todos: JSON.parse(window.localStorage.getItem('todos')),
+            currentEditingItem: null,
+            filterCondition: null
+        },
+        methods: {
+            // 点击删除按钮 删除一个todo
+            handleRemoveTodo(index) {
+                this.todos.splice(index, 1)
+                // window.localStorage.setItem('todos', JSON.stringify(this.todos))
+            },
+            // 添加一个todo
+            handleAddTodo(e) {
+                // 拿到文本框中的值
+                const newTitle = e.target.value.trim()
+                // 确保文本框中有输入值
+                if(newTitle.length) {
+                    const length = this.todos.length
+                    // 确定新ID
+                    const newId = length ? this.todos[length-1].id+1 : 1
+                    // 增添一条新todo
+                    this.todos.push({
+                        id:newId,
+                        title: newTitle,
+                        completed: false
+                    })
+                    // window.localStorage.setItem('todos', JSON.stringify(this.todos))
+                    // 文本框清空
+                    e.target.value = ""
+                }
+            },
+            // 编辑todo
+            handleEditTodo(index, e) {
+                const newTitle = e.target.value.trim()
+                if(newTitle.length) {
+                    this.todos[index].title = newTitle
+                    // window.localStorage.setItem('todos', JSON.stringify(this.todos))
+                } else {  // 删除操作
+                    this.todos.splice(index, 1)
+                    // window.localStorage.setItem('todos', JSON.stringify(this.todos))
+                }
+                // 把该item的editing属性去掉
+                this.currentEditingItem = null
+            },
+            handleCheckAll(e) {
+                console.log(e.target.checked)
+                this.todos.forEach(t => t.completed = e.target.checked)
+            },
+            handleClearCompleted() {
+                this.todos = this.todos.filter(t=>t.completed===false)
+            }
+        },
+        computed: {
+            checkAllState: {
+                get() {
+                    return this.todos.every(t=>t.completed)
+                },
+                set(val) {
+                    this.todos.forEach(t => t.completed = val)
+                }
+            },
+            leftItemCount() {
+                return (this.todos.filter(t=>!t.completed)).length
+            },
+            filterTodos() {
+                switch(this.filterCondition) {
+                    case 'active':
+                       return this.todos.filter(t=>!t.completed)
+                       break
+                    case 'completed':
+                        return this.todos.filter(t=>t.completed)
+                        break
+                    default: 
+                        return this.todos
+                        break
+                }
+            }
+        },
+        watch: {
+            // todos变化 存储变化
+            todos: {
+                deep: true,
+                handler(val) {
+                    window.localStorage.setItem('todos', JSON.stringify(this.todos))
+                }
+            }
+        }
+    })
+
+    window.onhashchange = function() {
+        console.log(window.location.hash.substr(2))
+        vm.filterCondition = window.location.hash.substr(2)
+    }
+    window.onhashchange()
+</script>
+</body>
+
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2-折扣单价案例-计算属性实现</title>
+  <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+<body>
+  <div id="root">
+    总价：<input type="text" v-model="totalPrice"><br>
+    数量：<input type="text" v-model="amount"><br>
+    折扣：<input type="text" v-model="discount">折<br>
+    <!-- 利用计算属性 -->
+    打折后的单价为：<span>{{avgPrice}}</span><br>
+  </div>
+  <script type="text/javascript">
+    const vm = new Vue({
+      el: '#root',
+      data: {
+        totalPrice: 300,
+        amount: 10,
+        discount: 7
+      },
+      // methods: {
+      //   getPrice() {
+      //     return (this.totalPrice / this.amount) * this.discount * 0.1
+      //   }
+      // }
+      // 计算属性实现
+      computed: {
+        // avgPrice: { 
+        //   get() { // 计算出来后 以后如果值没有变化 文档中用这个属性无数次 下面的get函数也只调用了初始的那一次
+        //     return (this.totalPrice / this.amount) * this.discount * 0.1
+        //   },
+        //   set(value) {
+        //     this.totalPrice = (value / (this.discount * 0.1)) * this.amount 
+        //   }
+        // }
+        // 简写
+        avgPrice() {
+          return (this.totalPrice / this.amount) * this.discount * 0.1
+        }
+      }
+    })
+  </script>
+</body>
+</html>

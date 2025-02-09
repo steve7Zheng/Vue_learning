@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>4-深度侦听</title>
+  <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+<body>
+  <div id="root">
+    <h2>我是{{name}}，今天我很{{happy ? '高兴' : '难过'}}</h2>
+    <button @click="changeMood">改变心情</button>
+    <br>
+    <button @click="numbers.x++">x++</button>
+  </div>
+  <script type="text/javascript">
+    const vm = new Vue({
+      el: '#root',
+      data: {
+        happy: 'true',
+        name: "jack",
+        numbers: {
+          x: 1,
+          y: 1
+        }
+      },
+      methods: {
+        changeMood() {
+          this.happy = !this.happy
+        }
+      },
+      // 侦听属性
+      watch: {
+        // 要侦听哪个属性 就写哪个属性
+        happy: {
+          // 初始化就调用一次handler
+          immediate: true,
+          handler(newVal, oldVal) {
+            console.log('happy属性被修改了', newVal, oldVal)
+          }
+        },
+        // 这样似乎也实现了“深度侦听” 但太麻烦
+        // "numbers.x": {
+        //   handler(newVal, oldVal) {
+        //     console.log('numbers.x属性被修改了', newVal, oldVal)
+        //   }
+        // }
+        numbers: {
+          deep: true, // 开启深度侦听 侦听这个属性包括它的子孙
+          handler(newVal, oldVal) {
+            console.log('numbers.x属性被修改了', newVal.x, oldVal.x)
+          }
+        }
+      }
+    })
+  </script>
+</body>
+</html>

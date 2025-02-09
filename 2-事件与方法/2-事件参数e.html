@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2-事件参数e</title>
+  <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+<body>
+  <div id="root">
+    <h2>我是{{name}}，今天我很{{happy ? '高兴' : '难过'}}</h2>
+    <!-- 不传参 不用写e 下面函数自带事件参数e -->
+    <button @click="sayHi">打招呼1</button>
+    <br>
+    <!-- 函数有带参数 函数体中还要用到事件参数e的 括号形参里面必须带上$event -->
+    <button @click="sayAge(20, $event)">打招呼2</button>
+    <br>
+  </div>
+  <script type="text/javascript">
+    const vm = new Vue({
+      el: '#root',
+      data: {
+        happy: 'true',
+        name: "jack"
+      },
+      // 函数区域 注意是methods s!!!
+      methods: {
+        sayHi(e) { // 此处的this是vm
+          console.log(e)
+          console.log(e.target)
+          e.target.innerText = this.name + "打招呼"
+          e.target.style.background = "red"
+          alert("同学你好， 我是" + this.name)
+        },
+        sayAge(age, e) {
+          console.log(e)
+          alert(`同学你好，我今年${age}岁了`)
+        }
+      }
+    })
+  </script>
+</body>
+</html>

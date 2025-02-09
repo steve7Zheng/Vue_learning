@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2-列表渲染</title>
+  <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+<body>
+  <div id="root">
+    <!-- 遍历数组 -->
+    <h2>学生列表（遍历数组）</h2>
+    <ul>
+      <!-- 循环遍历渲染 v-for -->
+      <li v-for="item in studentList">
+        {{item.id}}-{{item.name}}-{{item.age}}
+      </li>
+    </ul>
+    <ul>
+      <li v-for="(item, index) in studentList">
+        {{index}}-{{item.id}}-{{item.name}}-{{item.age}}
+      </li>
+    </ul>
+    <ul>
+      <!-- 绑定一个key 用index作为key :key="index" -->
+      <li v-for="(item, index) in studentList" :key="index">
+        {{index}}-{{item.id}}-{{item.name}}-{{item.age}}
+      </li>
+    </ul>
+    <ul>
+      <!-- 用item.id作为key :key="item.id"-->
+      <!-- 用item.id作为key比较好 -->
+      <!-- key是虚拟DOM对象的标识，当数据发生变化时，Vue会根据【新数据】生成【新的虚拟DOM】, 
+					 随后Vue进行【新虚拟DOM】与【旧虚拟DOM】的差异比较，比较规则如下： -->
+      <!-- (1).旧虚拟DOM中找到了与新虚拟DOM相同的key：
+              ①.若虚拟DOM中内容没变, 直接使用之前的真实DOM！
+              ②.若虚拟DOM中内容变了, 则生成新的真实DOM，随后替换掉页面中之前的真实DOM。
+           (2).旧虚拟DOM中未找到与新虚拟DOM相同的key
+               创建新的真实DOM，随后渲染到到页面。 -->
+      <!-- 用index作为key可能会引发的问题：
+           1. 若对数据进行：逆序添加、逆序删除等破坏顺序操作:
+              会产生没有必要的真实DOM更新 ==> 界面效果没问题, 但效率低。
+           2. 如果结构中还包含输入类的DOM：
+              会产生错误DOM更新 ==> 界面有问题。 -->
+      <li v-for="(item, index) in studentList" :key="item.id">
+        {{index}}-{{item.id}}-{{item.name}}-{{item.age}}
+      </li>
+    </ul>
+    <ul>
+      <li v-for="(item, index) in studentResult" :key="item.id">
+        {{index}}-{{item.id}}-{{item.name}}-{{item.age}}
+      </li>
+    </ul>
+    <!-- 遍历对象 用of -->
+    <h2>教师信息（遍历对象）</h2>
+    <ul>
+      <li v-for="(value, key) of teacher" :key="key">
+        <!-- key是属性名 -->
+        {{key}}-{{value}}
+      </li>
+    </ul>
+    <!-- 遍历字符串 用of -->
+    <h2>测试遍历字符串（用得少）</h2>
+    <ul>
+      <li v-for="(char, index) of str" :key="index">
+        {{char}}-{{index}}
+      </li>
+    </ul>
+  </div>
+  <script type="text/javascript">
+    const vm = new Vue({
+      el: '#root',
+      data:{
+        studentList:[
+          {id:'001',name:'张三',age:22},
+          {id:'002',name:'李四',age:19},
+          {id:'003',name:'王五',age:20}
+        ],
+        teacher:{
+          id:'1001',
+          name:'陈强',
+          edu:'博士'
+        },
+        str:"helloworld"
+      },
+      computed: {
+        studentResult(){
+          return this.studentList.filter(value => value.age >= 20)
+        }
+      }
+    })
+  </script>
+</body>
+</html>

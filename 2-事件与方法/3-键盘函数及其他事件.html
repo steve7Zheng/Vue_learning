@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3-键盘函数及其他事件</title>
+  <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+<body>
+  <div id="root">
+    <!-- 键盘函数 -->
+    <!-- Vue中常用的键盘别名 回车enter 删除(退格)delete
+         退出esc 空格space 换行tab 上up下down左left右right  -->
+    <!-- 键盘事件 @keydown="" -->
+    <input type="text" placeholder="按下任意键触发-keydown" @keydown="showInfo">
+    <br>
+    <!-- 键盘事件加修饰符 表示出发的是哪个键 @keydown.enter="" -->
+    <input type="text" placeholder="按下回车键触发-keydown" @keydown.enter="showInfo">
+    <br>
+    <!-- 键盘事件 @keyup="" -->
+    <input type="text" placeholder="按下空格键回弹后触发-keyup" @keyup.space="showInfo">
+    <br>
+    <!-- 其他事件 改变事件 @change="" -->
+    <input type="checkbox" @change="testChange">
+    <!-- 其他事件 鼠标事件 @mouseover="" -->
+    <input type="button" value="测试鼠标事件" @mouseover="testMouseover">
+  </div>
+  <script type="text/javascript">
+    const vm = new Vue({
+      el: '#root',
+      methods: {
+        showInfo(e) {
+          console.log(e.key, e.keyCode)
+        },
+        testChange() {
+          console.log('改变事件触发')
+        },
+        testMouseover() {
+          console.log('鼠标事件触发')
+        }
+      }
+    })
+  </script>
+</body>
+</html>

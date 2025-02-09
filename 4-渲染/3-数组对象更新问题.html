@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3-数组对象更新问题</title>
+  <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+<body>
+  <div id="root">
+    <button @click="update">更新学生信息</button>
+    <!-- 遍历数组 -->
+    <h2>学生列表（遍历数组）</h2>
+    <ul>
+      <li v-for="(item,index) in studentList" :key="item.id">
+        {{index}}-{{item.id}}-{{item.name}}-{{item.age}}
+      </li>
+    </ul>
+  </div>
+  <script type="text/javascript">
+    const vm = new Vue({
+      el: '#root',
+      data:{
+        studentList:[
+          {id:'001',name:'张三',age:22},
+          {id:'002',name:'李四',age:19},
+          {id:'003',name:'王五',age:20}
+        ]
+      },
+     methods: {
+        update() {
+          // 下面这个不起作用 因为数组里面的元素没有get和set方法
+          // this.studentList[0] = {id:'001',name:'赵六',age:33}
+          // 但别忘了它可是一个数组  可以用数组的原生方法啊
+          this.studentList.splice(0, 1, {id:'001',name:'赵六',age:33})
+        }
+      }
+    })
+  </script>
+</body>
+</html>

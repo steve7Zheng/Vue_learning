@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3-侦听属性</title>
+  <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+<body>
+  <div id="root">
+    <h2>我是{{name}}，今天我很{{happy ? '高兴' : '难过'}}</h2>
+    <button @click="changeMood">改变心情</button>
+    <br>
+  </div>
+  <script type="text/javascript">
+    const vm = new Vue({
+      el: '#root',
+      data: {
+        happy: 'true',
+        name: "jack"
+      },
+      // 函数区域 注意是methods s!!!
+      methods: {
+        changeMood() {
+          this.happy = !this.happy
+        }
+      },
+      // 侦听属性
+      // watch: {
+      //   // 要侦听哪个属性 就写哪个属性
+      //   happy: {
+      //     // 初始化就调用一次handler
+      //     immediate: true,
+      //     handler(newVal, oldVal) {
+      //       console.log('happy属性被修改了', newVal, oldVal)
+      //     }
+      //   }
+      // }
+      // 简化写法
+      // watch: {  // 改变的时候调用 一开始不调用
+      //   // happy(newVal, oldVal) {
+      //   //   console.log('happy属性被修改了', newVal, oldVal)
+      //   // }
+      //   // 不需要old值
+      //   happy(newVal) {
+      //     console.log('happy属性被修改了', newVal)
+      //   }
+      // }
+    })
+    // 或者这样为vm添加侦听属性
+    vm.$watch("happy", {
+      immediate: true,
+      handler(newVal, oldVal) {
+        console.log('happy属性被修改了', newVal, oldVal)
+      }
+    })
+    // 或者这样为vm添加侦听属性 简化写法
+    // vm.$watch("happy", function(newVal) {
+    //   console.log('happy属性被修改了', newVal)
+    // })
+  </script>
+</body>
+</html>

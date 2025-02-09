@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1-1组件初体验</title>
+  <script type="text/javascript" src="../js/vue.js"></script>
+  <style>
+    .school-style {
+      background-color: #5bc0de;
+    }
+  </style>
+</head>
+<body>
+  <!-- <div id="root">
+    <div class="school-style">
+      <h2>学校名称：{{schoolName}}</h2>
+      <h2>学校地址：{{address}}</h2>
+      <button @click="changeSchoolName">改变学校名称</button>
+    </div>
+  </div> -->
+  <div id="root">
+    <School></School>
+    <hr>
+    <School></School>
+  </div>
+  <script type="text/javascript">
+    // 声明一个组件 可以省略Vue.extend()  可以直接 = {}
+    const School = Vue.extend({
+      // 最好这里就命名
+      name:"School",
+      // 没有el 用template装载结构
+      template: `
+      <div class="school-style">
+        <h2>学校名称：{{schoolName}}</h2>
+        <h2>学校地址：{{address}}</h2>
+        <button @click="changeSchoolName">改变学校名称</button>
+      </div>
+      `,
+      // 函数式
+      data() {
+        return {
+          schoolName: "浙江大学",
+          address: "杭州紫金港"
+        }
+      },
+      methods: {
+        changeSchoolName() {
+          this.schoolName = '武汉大学'
+        }
+      }
+    })
+    const vm = new Vue({
+      el: '#root',
+      // 注册组件
+      components: {
+        // 组件名称首字母会自动大写 自己设置大小写都可以 后面的字母不可以再大写（脚手架环境下可以）
+        School
+      }
+    })
+  </script>
+</body>
+</html>

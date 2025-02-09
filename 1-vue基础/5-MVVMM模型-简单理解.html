@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>5-MVVMM模型-简单理解</title>
+  <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+<body>
+  <!-- MVVM Model:data中的数据 View:视图 模板代码、文档对象模型（DOM） -->
+  <!-- ViewModel:视图模型 Vue实例 -->
+  <!-- VM：View->Model 通过各种DOM监听器实现 -->
+  <!-- Model->View 通过各种数据绑定Data Bindings 实现 -->
+  <!-- MVVM详细过程 -->
+  <!-- data数据 -（数据监视） _data - （数据代理） - vm代理对象 -->
+  <!-- - 内存虚拟DOM - 真实页面DOM -->
+  <div id="root">
+    {{id}}--{{name}}
+  </div>
+  <script type="text/javascript">
+    const vm = new Vue({
+      el: '#root',
+      // 通过数据代理 vm._data.id -> vm.id
+      data: {
+        id: 1,
+        name: 'jack',
+      }
+    })
+  </script>
+</body>
+</html>

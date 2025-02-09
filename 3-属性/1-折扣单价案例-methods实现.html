@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1-折扣单价案例-methods实现</title>
+  <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+<body>
+  <div id="root">
+    总价：<input type="text" v-model="totalPrice"><br>
+    数量：<input type="text" v-model="amount"><br>
+    折扣：<input type="text" v-model="discount">折<br>
+    <!-- v-model="getPrice()"  函数调用必须加括号 和插值语法一致 可以不加括号的是事件函数 -->
+    打折后的单价为：<input type="text" v-model="getPrice()"><br>
+  </div>
+  <script type="text/javascript">
+    const vm = new Vue({
+      el: '#root',
+      data: {
+        totalPrice: 300,
+        amount: 10,
+        discount: 7
+      },
+      // 函数实现
+      methods: {
+        getPrice() {
+          return (this.totalPrice / this.amount) * this.discount * 0.1
+        }
+      }
+    })
+  </script>
+</body>
+</html>

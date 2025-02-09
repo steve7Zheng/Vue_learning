@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1-点击事件初体验</title>
+  <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+<body>
+  <div id="root">
+    <h2>我是{{name}}，今天我很{{happy ? '高兴' : '难过'}}</h2>
+    <!-- 点击事件 v-on:click="" 简写成@click=""-->
+    <!-- 函数调用没有参数 加不加括号都可以 -->
+    <button @click="sayHi">打招呼1</button>
+    <br>
+    <!-- 函数带参数的 -->
+    <button @click="sayAge(20, 'hello')">打招呼2</button>
+    <br>
+    <!-- 改变心情函数 -->
+    <button @click="changeMood">改变心情</button>
+    <br>
+    <!-- 函数比较简单 直接在引号里面写函数体内容 -->
+    <button @click="happy = !happy">改变心情2</button>
+    <br>
+    <!-- 插值语法调用函数 要加括号-->
+    {{getMes()}}
+  </div>
+  <script type="text/javascript">
+    const vm = new Vue({
+      el: '#root',
+      data: {
+        happy: 'true',
+        name: "jack"
+      },
+      // 函数区域 注意是methods s!!!
+      methods: {
+        sayHi() { // 此处的this是vm
+          alert("同学你好， 我是" + this.name)
+        },
+        sayHi2: () => {
+          console.log(this) // 此处的this是Window
+        },
+        sayAge(age, str) {
+          alert(`同学你好，我是${this.name}，今年${age}岁了，${str}`)
+        },
+        changeMood() {
+          this.happy = !this.happy
+        },
+        getMes() {
+          return this.name + "很高兴"
+        }
+      }
+    })
+  </script>
+</body>
+</html>

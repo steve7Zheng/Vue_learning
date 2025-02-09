@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue初体验</title>
+  <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+<body>
+  <div id="root">
+    <!-- 插值语法 {{表达式}} -->
+    我叫{{name.toUpperCase()}}，家住在{{address}}，就读于{{school.name}}。
+    <br>
+    {{1 + 1}} {{1 > 2}}
+  </div>
+  <div>
+    {{name}}
+  </div>
+  <script type="text/javascript">
+    const vm = new Vue({
+      // el: '#root', // 第一种挂载方法
+      data: {
+        name: "jack",
+        address: "中国",
+        school: {
+          name: "一中"
+        }
+      }
+    })
+    // 第二种挂载方法
+    // vm.$mount('#root') // 这种写法比较灵活 比如下面的 可以加上一个定时器
+    setInterval(function() {
+      vm.$mount('#root')
+    }, 2000)
+  </script>
+</body>
+</html>

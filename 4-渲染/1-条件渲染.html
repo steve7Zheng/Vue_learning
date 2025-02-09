@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1-条件渲染</title>
+  <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+<body>
+  <div id="root">
+    <h2>当前的n值是：{{n}}</h2>
+    <button @click="n++">点我n+1</button>
+    <!-- v-show="false" === style="display:none" -->
+    <!-- v-show适用于切换频率较高的场景 -->
+    <h2 v-show="n%2===0">欢迎来到</h2>
+    <!-- v-if="false" 直接让元素消失 不仅仅是不显示 -->
+    <!-- v-if适用于切换频率较低的场景 -->
+    <h2 v-if="true">欢迎来到</h2>
+    <h2 v-if="n%2===0">欢迎来到</h2>
+    <!-- v-else和v-else-if -->
+    <!-- v-if可以和 v-else和v-else-if一起使用 但要求不能断 -->
+    <div v-if="n===1">jack</div>
+    <div v-else-if="n===2">tom</div>
+    <div v-else-if="n===3">amy</div>
+    <div v-else>ann</div>
+    <!-- 一堆元素要隐藏 可以用template把它们包裹起来 对模板进行隐藏 -->
+    <!-- template不会产生DOM元素 -->
+    <template v-if="false">
+      <div>jack</div>
+      <div>tom</div>
+      <div>alice</div>
+    </template>
+  </div>
+  <script type="text/javascript">
+    const vm = new Vue({
+      el: '#root',
+      data: {
+        name: 'jack',
+        n: 0
+      }
+    })
+  </script>
+</body>
+</html>
